@@ -884,10 +884,10 @@ function handleExcelImport(e){
         if(rawDate instanceof Date){ var dd=rawDate; dateStr=dd.getFullYear()+'-'+(dd.getMonth()+1+'').padStart(2,'0')+'-'+(dd.getDate()+'').padStart(2,'0'); }
         else if(rawDate){ dateStr=String(rawDate); }
         var qty=(row['納入数']!==''&&row['納入数']!==null&&row['納入数']!==undefined)?Number(row['納入数']):'';
-        var cost=(row['納入価（円）']!==''&&row['納入価（円）']!==null&&row['納入価（円）']!==undefined)?Number(row['納入価（円）']):(row['納入価']!==''&&row['納入価']!==null&&row['納入価']!==undefined?Number(row['納入価']):'');
         var costExTax=(row['納入価（税抜）']!==''&&row['納入価（税抜）']!==null&&row['納入価（税抜）']!==undefined)?Number(row['納入価（税抜）']):'';
         var taxRate=(row['税率']!==''&&row['税率']!==null&&row['税率']!==undefined)?Number(row['税率']):'';
         var costInc=(row['納入価（税込）']!==''&&row['納入価（税込）']!==null&&row['納入価（税込）']!==undefined)?Number(row['納入価（税込）']):'';
+        var cost='';
         if(costInc!=='') cost=costInc;
         else if(costExTax!==''&&taxRate!=='') cost=Math.round(costExTax*(1+taxRate/100));
         var sp=(row['販売価格（円）']!==''&&row['販売価格（円）']!==null&&row['販売価格（円）']!==undefined)?Number(row['販売価格（円）']):(row['販売価格']!==''&&row['販売価格']!==null&&row['販売価格']!==undefined?Number(row['販売価格']):'');
