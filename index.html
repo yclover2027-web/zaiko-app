@@ -704,7 +704,10 @@ function openDeliveryModal(id){
   var ld=getLatest(item);
   var hint=document.getElementById('d_cost_hint');
   if(ld&&ld.cost!==''&&ld.cost!==null&&ld.cost!==undefined){
-    hint.textContent='空白のままにすると前回と同じ '+fmtPrice(ld.cost)+' が自動入力されます';
+    var hintParts=['税込：'+fmtPrice(ld.cost)];
+    if(ld.costExTax!==''&&ld.costExTax!==null&&ld.costExTax!==undefined) hintParts.push('税抜：'+fmtPrice(ld.costExTax));
+    if(ld.taxRate!==''&&ld.taxRate!==null&&ld.taxRate!==undefined) hintParts.push('税率：'+ld.taxRate+'%');
+    hint.textContent='空白のままにすると前回と同じ（'+hintParts.join('　')+'）が自動入力されます';
     hint.style.display='block';
   } else {
     hint.style.display='none';
@@ -745,13 +748,24 @@ function addDelivery(){
   if(!d&&q===''&&c===''){ showToast('内容を入力してください','error'); return; }
   if(!item.deliveries) item.deliveries=[];
   var usedCost;
+  var prevLd=getLatest(item);
+  var usedCost, usedCostExTax, usedTaxRate;
   if(c!==''){
     usedCost=Number(c);
   } else {
-    var prevLd=getLatest(item);
     usedCost=(prevLd&&prevLd.cost!==''&&prevLd.cost!==null&&prevLd.cost!==undefined)?prevLd.cost:'';
   }
-  item.deliveries.push({id:genId(),date:d||'',qty:q!==''?Number(q):'',cost:usedCost,costExTax:cEx!==''?Number(cEx):'',taxRate:cRate!==''?Number(cRate):''});
+  if(cEx!==''){
+    usedCostExTax=Number(cEx);
+  } else {
+    usedCostExTax=(prevLd&&prevLd.costExTax!==''&&prevLd.costExTax!==null&&prevLd.costExTax!==undefined)?prevLd.costExTax:'';
+  }
+  if(cRate!==''){
+    usedTaxRate=Number(cRate);
+  } else {
+    usedTaxRate=(prevLd&&prevLd.taxRate!==''&&prevLd.taxRate!==null&&prevLd.taxRate!==undefined)?prevLd.taxRate:'';
+  }
+  item.deliveries.push({id:genId(),date:d||'',qty:q!==''?Number(q):'',cost:usedCost,costExTax:usedCostExTax,taxRate:usedTaxRate});
   ['d_date','d_qty','d_costExTax','d_taxRate','d_cost'].forEach(function(i){ document.getElementById(i).value=''; });
   renderDeliveryList(item);
   renderTable();
