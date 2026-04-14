@@ -68,9 +68,9 @@ input, select, textarea { font-family: inherit; }
 .table-header { padding:14px 18px;border-bottom:1px solid #EDF2F7;display:flex;align-items:center;justify-content:space-between; }
 .table-header-title { font-weight:600;font-size:15px;color:#2D3748; }
 .item-count { font-size:12px;color:#A0AEC0;margin-left:8px; }
-.table-scroll { overflow-x:auto; }
+.table-scroll { overflow-x:auto; overflow-y:auto; max-height:calc(100vh - 310px); }
 table { width:100%;border-collapse:collapse;min-width:860px; }
-thead th { background:#F8FAFC;padding:10px 13px;font-size:12px;font-weight:600;color:#718096;text-align:left;border-bottom:1px solid #EDF2F7;white-space:nowrap;user-select:none; }
+thead th { background:#F8FAFC;padding:10px 13px;font-size:12px;font-weight:600;color:#718096;text-align:left;border-bottom:1px solid #EDF2F7;white-space:nowrap;user-select:none;position:sticky;top:0;z-index:2; }
 thead th.sortable { cursor:pointer; }
 thead th.sortable:hover { background:#EDF2F7;color:#4A5568; }
 thead th .sort-icon { margin-left:3px;opacity:.4;font-size:10px; }
