@@ -252,8 +252,9 @@ td.name { font-weight:500;color:#2D3748;max-width:200px; }
             <th class="sortable" onclick="sortBy('lastDate')">最終入荷日 <span class="sort-icon">▲</span></th>
             <th class="sortable" onclick="sortBy('lastQty')">最終入荷数 <span class="sort-icon">▲</span></th>
             <th class="sortable" onclick="sortBy('wholesaler')">卸 <span class="sort-icon">▲</span></th>
-            <th class="sortable" onclick="sortBy('lastCost')">最終納入価（税込） <span class="sort-icon">▲</span></th>
+            <th class="sortable" onclick="sortBy('lastCost')">最終納入価（税抜） <span class="sort-icon">▲</span></th>
             <th class="sortable" onclick="sortBy('sellPrice')">販売価格（税込） <span class="sort-icon">▲</span></th>
+            <th>税率</th>
             <th>分類</th>
             <th>項目</th>
             <th style="width:110px">操作</th>
@@ -451,7 +452,7 @@ td.name { font-weight:500;color:#2D3748;max-width:200px; }
             <th style="width:40px">No.</th>
             <th>商品名</th>
             <th style="width:120px">卸</th>
-            <th style="width:110px;text-align:right">納入価（税込）</th>
+            <th style="width:110px;text-align:right">納入価（税抜）</th>
             <th style="width:110px;text-align:center">カウント</th>
             <th style="width:120px;text-align:right">合計金額</th>
           </tr>
@@ -584,7 +585,7 @@ function getSorted(list) {
     var va,vb;
     if(sortKey==='lastDate'){ va=getLatest(a)?getLatest(a).date||'':''; vb=getLatest(b)?getLatest(b).date||'':''; return sortAsc?va.localeCompare(vb):vb.localeCompare(va); }
     if(sortKey==='lastQty'){ va=Number((getLatest(a)||{}).qty)||0; vb=Number((getLatest(b)||{}).qty)||0; return sortAsc?va-vb:vb-va; }
-    if(sortKey==='lastCost'){ va=Number((getLatest(a)||{}).cost)||0; vb=Number((getLatest(b)||{}).cost)||0; return sortAsc?va-vb:vb-va; }
+    if(sortKey==='lastCost'){ va=Number((getLatest(a)||{}).costExTax)||0; vb=Number((getLatest(b)||{}).costExTax)||0; return sortAsc?va-vb:vb-va; }
     if(sortKey==='sellPrice'){ va=Number(a.sellPrice)||0; vb=Number(b.sellPrice)||0; return sortAsc?va-vb:vb-va; }
     va=String(a[sortKey]||'').toLowerCase(); vb=String(b[sortKey]||'').toLowerCase();
     return sortAsc?va.localeCompare(vb,'ja'):vb.localeCompare(va,'ja');
@@ -601,7 +602,7 @@ function renderTable() {
   document.getElementById('tableCount').textContent='（'+filtered.length+'件）';
   var tbody=document.getElementById('tableBody');
   if(filtered.length===0){
-    tbody.innerHTML='<tr><td colspan="9"><div class="empty-state"><div class="empty-state-icon">📭</div><p>商品データがありません</p><p style="font-size:12px;margin-top:6px;color:#CBD5E0">右下の「＋」ボタンから追加できます</p></div></td></tr>';
+    tbody.innerHTML='<tr><td colspan="10"><div class="empty-state"><div class="empty-state-icon">📭</div><p>商品データがありません</p><p style="font-size:12px;margin-top:6px;color:#CBD5E0">右下の「＋」ボタンから追加できます</p></div></td></tr>';
     return;
   }
   tbody.innerHTML=filtered.map(function(item){
@@ -611,7 +612,8 @@ function renderTable() {
     var itemBadge=item.item?'<span class="badge badge-item" data-item="'+esc(item.item)+'">'+esc(item.item)+'</span>':'<span class="ev">—</span>';
     var dateStr=ld&&ld.date?fmtDate(ld.date):'<span class="ev">—</span>';
     var qtyStr=(ld&&ld.qty!==''&&ld.qty!==null&&ld.qty!==undefined)?Number(ld.qty).toLocaleString():'<span class="ev">—</span>';
-    var costStr=ld&&ld.cost?fmtPrice(ld.cost):'<span class="ev">—</span>';
+    var costStr=ld&&ld.costExTax?fmtPrice(ld.costExTax):'<span class="ev">—</span>';
+    var taxRateStr=ld&&ld.taxRate?ld.taxRate+'%':'<span class="ev">—</span>';
     var sellStr=item.sellPrice?fmtPrice(item.sellPrice):'<span class="ev">—</span>';
     var histBadge=cnt>0?'<span style="font-size:10px;color:#A0AEC0;margin-left:2px">('+cnt+'回)</span>':'';
     return '<tr>'
@@ -621,6 +623,7 @@ function renderTable() {
       +'<td>'+(item.wholesaler?esc(item.wholesaler):'<span class="ev">—</span>')+'</td>'
       +'<td>'+costStr+'</td>'
       +'<td>'+sellStr+'</td>'
+      +'<td>'+taxRateStr+'</td>'
       +'<td>'+catBadge+'</td>'
       +'<td>'+itemBadge+'</td>'
       +'<td><div class="action-btns">'
@@ -923,11 +926,11 @@ function buildSheetHtml(category,itemFilter,now){
   data=data.slice().sort(function(a,b){ return (a.name||'').localeCompare(b.name||'','ja'); });
   var rows=data.map(function(item,idx){
     var ld=getLatest(item);
-    var costStr=ld&&ld.cost?fmtPrice(ld.cost):'—';
+    var costStr=ld&&ld.costExTax?fmtPrice(ld.costExTax):'—';
     return '<tr><td style="text-align:center;color:#888">'+(idx+1)+'</td><td>'+esc(item.name)+'</td><td>'+(item.wholesaler?esc(item.wholesaler):'—')+'</td><td style="text-align:right">'+costStr+'</td><td></td><td></td></tr>';
   }).join('');
   var totalRow='<tr style="border-top:2px solid #333;font-weight:700;background:#f0f0f0"><td colspan="4" style="text-align:right;padding:8px 10px">TOTAL</td><td></td><td></td></tr>';
-  return '<div class="print-sheet"><div class="print-header-area"><div class="print-title">📋 '+title+'</div><div class="print-meta">棚卸日：　　　年　　月　　日<br>担当者：___________________</div></div><table class="print-table"><thead><tr><th style="width:36px">No.</th><th>商品名</th><th style="width:120px">卸</th><th style="width:95px">納入価（税込）</th><th style="width:80px">カウント</th><th style="width:110px">合計金額</th></tr></thead><tbody>'+(rows||'<tr><td colspan="6" style="text-align:center;padding:20px;color:#999">該当商品がありません</td></tr>')+totalRow+'</tbody></table><div class="print-footer"><span>印刷日：'+now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日</span><span>総数：'+data.length+'件</span></div></div>';
+  return '<div class="print-sheet"><div class="print-header-area"><div class="print-title">📋 '+title+'</div><div class="print-meta">棚卸日：　　　年　　月　　日<br>担当者：___________________</div></div><table class="print-table"><thead><tr><th style="width:36px">No.</th><th>商品名</th><th style="width:120px">卸</th><th style="width:95px">納入価（税抜）</th><th style="width:80px">カウント</th><th style="width:110px">合計金額</th></tr></thead><tbody>'+(rows||'<tr><td colspan="6" style="text-align:center;padding:20px;color:#999">該当商品がありません</td></tr>')+totalRow+'</tbody></table><div class="print-footer"><span>印刷日：'+now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日</span><span>総数：'+data.length+'件</span></div></div>';
 }
 function printSheet(category,itemFilter){
   closePrintModal();
@@ -1003,7 +1006,7 @@ function renderTanakatsuTable() {
 
   document.getElementById('tanakatsuTableBody').innerHTML = data.map(function(item, idx) {
     var ld = getLatest(item);
-    var cost = (ld && ld.cost) ? Number(ld.cost) : 0;
+    var cost = (ld && ld.costExTax) ? Number(ld.costExTax) : 0;
     var count = tanakatsuCounts[item.id] !== undefined ? tanakatsuCounts[item.id] : '';
     var subtotal = (count !== '' && cost) ? cost * Number(count) : '';
     return '<tr>'
@@ -1069,7 +1072,7 @@ function printTanakatsu() {
 
   var rows = data.map(function(item, idx) {
     var ld = getLatest(item);
-    var cost = (ld && ld.cost) ? Number(ld.cost) : 0;
+    var cost = (ld && ld.costExTax) ? Number(ld.costExTax) : 0;
     var count = tanakatsuCounts[item.id] !== undefined ? tanakatsuCounts[item.id] : '';
     var subtotal = (count !== '' && cost) ? cost * count : '';
     if(subtotal !== '') grandTotal += subtotal;
@@ -1096,7 +1099,7 @@ function printTanakatsu() {
     + '</div>'
     + '<table class="print-table">'
     +   '<thead><tr><th style="width:36px">No.</th><th>商品名</th><th style="width:120px">卸</th>'
-    +   '<th style="width:95px">納入価（税込）</th><th style="width:70px">カウント</th><th style="width:110px">合計金額</th></tr></thead>'
+    +   '<th style="width:95px">納入価（税抜）</th><th style="width:70px">カウント</th><th style="width:110px">合計金額</th></tr></thead>'
     +   '<tbody>'+(rows || '<tr><td colspan="6" style="text-align:center;padding:20px;color:#999">該当商品がありません</td></tr>')+totalRow+'</tbody>'
     + '</table>'
     + '<div class="print-footer"><span>印刷日：'+now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日</span>'
