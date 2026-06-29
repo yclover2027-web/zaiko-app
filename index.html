@@ -578,7 +578,7 @@ td.name { font-weight:500;color:#2D3748;max-width:200px; }
         <div class="help-step"><div class="help-step-num">1</div><div class="help-step-text"><strong>「📊 棚卸入力」</strong> を押してカテゴリを選ぶ</div></div>
         <div class="help-step"><div class="help-step-num">2</div><div class="help-step-text">実際に棚の商品を数えて <strong>カウント欄に数字</strong> を入力する</div></div>
         <div class="help-step"><div class="help-step-num">3</div><div class="help-step-text">合計金額とTOTALが <strong>自動で計算</strong> される</div></div>
-        <div class="help-step"><div class="help-step-num">4</div><div class="help-step-text">「🖨️ 結果を印刷」で記録として印刷できる</div></div>
+        <div class="help-step"><div class="help-step-num">4</div><div class="help-step-text">「🖨️ 結果を印刷」で、カウントが1以上の商品だけを記録として印刷できる</div></div>
       </div>
     </div>
 
@@ -1508,26 +1508,33 @@ function printTanakatsu() {
   var now = new Date();
   var grandTotal = 0;
 
-  var rows = data.map(function(item, idx) {
+  // 棚卸結果の印刷は、実際に在庫があった商品だけを記録として残す。
+  // カウントが0または未入力の商品は印刷しない。
+  var printData = data.filter(function(item){
+    var count = tanakatsuCounts[item.id] !== undefined ? Number(tanakatsuCounts[item.id]) : 0;
+    return count > 0;
+  });
+
+  var rows = printData.map(function(item, idx) {
     var ld = getLatest(item);
     var cost = (ld && ld.costExTax) ? Number(ld.costExTax) : 0;
-    var count = tanakatsuCounts[item.id] !== undefined ? tanakatsuCounts[item.id] : '';
-    var subtotal = (count !== '' && cost) ? cost * count : '';
-    if(subtotal !== '') grandTotal += subtotal;
+    var count = Number(tanakatsuCounts[item.id]);
+    var subtotal = cost ? cost * count : 0;
+    grandTotal += subtotal;
     return '<tr>'
       + '<td style="text-align:center;color:#888">'+(idx+1)+'</td>'
       + '<td>'+esc(item.name)+'</td>'
       + '<td>'+(item.wholesaler ? esc(item.wholesaler) : '—')+'</td>'
       + '<td style="text-align:right">'+(cost ? fmtPrice(cost) : '—')+'</td>'
-      + '<td style="text-align:center;font-weight:700">'+(count !== '' ? count : '')+'</td>'
-      + '<td style="text-align:right;font-weight:600">'+(subtotal !== '' ? fmtPrice(subtotal) : '')+'</td>'
+      + '<td style="text-align:center;font-weight:700">'+count.toLocaleString()+'</td>'
+      + '<td style="text-align:right;font-weight:600">'+(cost ? fmtPrice(subtotal) : '—')+'</td>'
       + '</tr>';
   }).join('');
 
-  var totalRow = '<tr style="border-top:2px solid #333;font-weight:700;background:#f0f0f0">'
+  var totalRow = printData.length > 0 ? '<tr style="border-top:2px solid #333;font-weight:700;background:#f0f0f0">'
     + '<td colspan="5" style="text-align:right;padding:10px">TOTAL</td>'
     + '<td style="text-align:right;padding:10px;font-size:14px">'+fmtPrice(grandTotal)+'</td>'
-    + '</tr>';
+    + '</tr>' : '';
 
   document.getElementById('printArea').innerHTML =
     '<div class="print-sheet">'
@@ -1538,10 +1545,10 @@ function printTanakatsu() {
     + '<table class="print-table">'
     +   '<thead><tr><th style="width:36px">No.</th><th>商品名</th><th style="width:120px">仕入れ先</th>'
     +   '<th style="width:95px">原価（税抜）</th><th style="width:70px">カウント</th><th style="width:110px">合計金額</th></tr></thead>'
-    +   '<tbody>'+(rows || '<tr><td colspan="6" style="text-align:center;padding:20px;color:#999">該当商品がありません</td></tr>')+totalRow+'</tbody>'
+    +   '<tbody>'+(rows || '<tr><td colspan="6" style="text-align:center;padding:20px;color:#999">カウントが1以上の商品がありません</td></tr>')+totalRow+'</tbody>'
     + '</table>'
     + '<div class="print-footer"><span>印刷日：'+now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日</span>'
-    + '<span>総数：'+data.length+'件</span><span style="font-weight:700">合計：'+fmtPrice(grandTotal)+'</span></div>'
+    + '<span>印刷対象：'+printData.length+'件</span><span style="font-weight:700">合計：'+fmtPrice(grandTotal)+'</span></div>'
     + '</div>';
 
   document.getElementById('printArea').style.display = 'block';
