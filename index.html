@@ -56,13 +56,16 @@ input, select, textarea { font-family: inherit; }
 .tab.active.tab-otc{color:#DC2626;} .tab.active.tab-cons{color:#059669;}
 .subtabs { display:flex;gap:4px;flex-wrap:wrap; }
 .subtab { padding:4px 10px;border-radius:20px;border:1.5px solid #E2E8F0;font-size:12px;font-weight:500;background:#fff;color:#718096;transition:all .15s; }
-.subtab[data-item="瓶"].active       {color:#2B7CB8;border-color:#2B7CB8;background:#EBF5FB;}
-.subtab[data-item="調剤"].active     {color:#7B3FA6;border-color:#7B3FA6;background:#F5EBF9;}
-.subtab[data-item="袋"].active       {color:#D4690A;border-color:#D4690A;background:#FEF3E8;}
+.subtab.active                       {color:#4A7FC1;border-color:#4A7FC1;background:#F0F7FF;}
+.subtab[data-item="従業員"].active   {color:#4D7C0F;border-color:#4D7C0F;background:#F7FEE7;}
+.subtab[data-item="分包紙"].active   {color:#B02880;border-color:#B02880;background:#FCEAF5;}
+.subtab[data-item="薬袋"].active     {color:#D4690A;border-color:#D4690A;background:#FEF3E8;}
+.subtab[data-item="手帳/その他"].active {color:#0E7490;border-color:#0E7490;background:#ECFEFF;}
 .subtab[data-item="軟膏容器"].active {color:#1A8A5A;border-color:#1A8A5A;background:#E8F8F0;}
-.subtab[data-item="分包"].active     {color:#B02880;border-color:#B02880;background:#FCEAF5;}
-.subtab[data-item="窓消"].active     {color:#9A7700;border-color:#9A7700;background:#FDF8E8;}
-.subtab[data-item="機械"].active     {color:#4A5568;border-color:#4A5568;background:#EDF2F7;}
+.subtab[data-item="投薬瓶"].active   {color:#2B7CB8;border-color:#2B7CB8;background:#EBF5FB;}
+.subtab[data-item="インクカートリッジ"].active {color:#7B3FA6;border-color:#7B3FA6;background:#F5EBF9;}
+.subtab[data-item="マルチリボン"].active {color:#9A7700;border-color:#9A7700;background:#FDF8E8;}
+.subtab[data-item="その他"].active   {color:#4A5568;border-color:#4A5568;background:#EDF2F7;}
 
 .table-wrap { background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden; }
 .table-header { padding:14px 18px;border-bottom:1px solid #EDF2F7;display:flex;align-items:center;justify-content:space-between;gap:12px; }
@@ -82,20 +85,30 @@ tbody tr:last-child { border-bottom:none; }
 tbody tr:hover { background:#F8FBFF; }
 tbody td { padding:10px 13px;font-size:13px;vertical-align:middle; }
 .delete-check-cell { width:42px;text-align:center; }
-.delete-check { width:17px;height:17px;cursor:pointer;accent-color:#DC2626; }
+.delete-check { width:17px;height:17px;cursor:pointer;accent-color:#4A7FC1; }
+/* 一括変換の分類・項目プルダウン（表の上部に並べるので小さめ） */
+.bulk-select { width:auto;min-width:110px;padding:5px 28px 5px 9px;font-size:12px; }
+/* 棚卸用紙：印刷する項目のチェック付きカード */
+.print-unit { cursor:pointer; }
+.print-unit input { width:17px;height:17px;accent-color:#4A7FC1;cursor:pointer;flex-shrink:0; }
+.print-unit.checked { border-color:#4A7FC1;background:#F0F7FF; }
+.print-unit.disabled { opacity:.45;cursor:not-allowed; }
+.print-group-title { font-size:12px;font-weight:600;color:#4A5568;margin:14px 0 8px; }
 td.name { font-weight:500;color:#2D3748;max-width:200px; }
 .jan-code-text { font-size:11px;color:#718096;font-weight:400;margin-top:3px;line-height:1.4; }
 .ev { color:#C0C8D8;font-size:12px; }
 .badge { display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap; }
 .badge-otc{background:#FEE2E2;color:#DC2626;} .badge-cons{background:#D1FAE5;color:#059669;}
 .badge-item{background:#EDF2F7;color:#4A5568;}
-.badge-item[data-item="瓶"]      {background:#DBEAFE;color:#1D4ED8;}
-.badge-item[data-item="調剤"]    {background:#EDE9FE;color:#6D28D9;}
-.badge-item[data-item="袋"]      {background:#FED7AA;color:#C2410C;}
+.badge-item[data-item="従業員"]  {background:#ECFCCB;color:#3F6212;}
+.badge-item[data-item="分包紙"]  {background:#FCE7F3;color:#9D174D;}
+.badge-item[data-item="薬袋"]    {background:#FED7AA;color:#C2410C;}
+.badge-item[data-item="手帳/その他"]{background:#CFFAFE;color:#155E75;}
 .badge-item[data-item="軟膏容器"]{background:#D1FAE5;color:#065F46;}
-.badge-item[data-item="分包"]    {background:#FCE7F3;color:#9D174D;}
-.badge-item[data-item="窓消"]    {background:#FEF3C7;color:#92400E;}
-.badge-item[data-item="機械"]    {background:#E5E7EB;color:#374151;}
+.badge-item[data-item="投薬瓶"]  {background:#DBEAFE;color:#1D4ED8;}
+.badge-item[data-item="インクカートリッジ"]{background:#EDE9FE;color:#6D28D9;}
+.badge-item[data-item="マルチリボン"]{background:#FEF3C7;color:#92400E;}
+.badge-item[data-item="その他"]  {background:#E5E7EB;color:#374151;}
 .action-btns { display:flex;gap:4px;white-space:nowrap; }
 .empty-state { text-align:center;padding:60px 20px;color:#A0AEC0; }
 .empty-state-icon { font-size:40px;margin-bottom:10px;opacity:.5; }
@@ -255,16 +268,8 @@ td.name { font-weight:500;color:#2D3748;max-width:200px; }
       <button class="tab tab-otc" data-tab="OTC" onclick="switchTab('OTC')">OTC</button>
       <button class="tab tab-cons" data-tab="消耗品" onclick="switchTab('消耗品')">消耗品</button>
     </div>
-    <div class="subtabs" id="subtabs" style="display:none">
-      <button class="subtab active" data-item="all" onclick="switchSubtab('all')">すべて</button>
-      <button class="subtab" data-item="瓶" onclick="switchSubtab('瓶')">瓶</button>
-      <button class="subtab" data-item="調剤" onclick="switchSubtab('調剤')">調剤</button>
-      <button class="subtab" data-item="袋" onclick="switchSubtab('袋')">袋</button>
-      <button class="subtab" data-item="軟膏容器" onclick="switchSubtab('軟膏容器')">軟膏容器</button>
-      <button class="subtab" data-item="分包" onclick="switchSubtab('分包')">分包</button>
-      <button class="subtab" data-item="窓消" onclick="switchSubtab('窓消')">窓消</button>
-      <button class="subtab" data-item="機械" onclick="switchSubtab('機械')">機械</button>
-    </div>
+    <!-- 項目の絞り込みボタンは renderSubtabs() が分類に合わせて作る -->
+    <div class="subtabs" id="subtabs" style="display:none"></div>
   </div>
 
   <div class="table-wrap">
@@ -274,7 +279,17 @@ td.name { font-weight:500;color:#2D3748;max-width:200px; }
         <span class="item-count" id="tableCount"></span>
       </div>
       <div class="bulk-actions">
-        <span class="bulk-selected-count" id="bulkDeleteCount">削除選択：0件</span>
+        <span class="bulk-selected-count" id="bulkDeleteCount">選択：0件</span>
+        <!-- 一括変換：分類 → 項目 の順に選んで「分類・項目を変更」 -->
+        <select class="form-input form-select bulk-select" id="bulkCategory" onchange="onBulkCategoryChange()">
+          <option value="">分類を選択</option>
+          <option value="OTC">OTC</option>
+          <option value="消耗品">消耗品</option>
+        </select>
+        <select class="form-input form-select bulk-select" id="bulkItem" disabled>
+          <option value="">項目</option>
+        </select>
+        <button class="btn btn-primary btn-sm" id="bulkChangeBtn" onclick="askChangeSelectedCategory()" disabled>分類・項目を変更</button>
         <button class="btn btn-danger btn-sm" id="bulkDeleteBtn" onclick="askDeleteSelectedProducts()" disabled>チェックした商品を削除</button>
       </div>
     </div>
@@ -321,17 +336,9 @@ td.name { font-weight:500;color:#2D3748;max-width:200px; }
         </select>
       </div>
       <div class="form-group" id="pItemFieldGroup">
-        <label class="form-label">項目 <span class="opt">消耗品のみ</span></label>
-        <select class="form-input form-select" id="p_item">
-          <option value="">選択してください</option>
-          <option value="瓶">瓶</option>
-          <option value="調剤">調剤</option>
-          <option value="袋">袋</option>
-          <option value="軟膏容器">軟膏容器</option>
-          <option value="分包">分包</option>
-          <option value="窓消">窓消</option>
-          <option value="機械">機械</option>
-        </select>
+        <label class="form-label">項目 <span class="opt">任意</span></label>
+        <!-- 選択肢は fillItemSelect() が分類（OTC／消耗品）に合わせて作る -->
+        <select class="form-input form-select" id="p_item"></select>
       </div>
       <div class="form-group full">
         <label class="form-label">商品名</label>
@@ -506,15 +513,11 @@ td.name { font-weight:500;color:#2D3748;max-width:200px; }
 <div class="modal-overlay" id="printModal" onclick="closeModalOnBg(event)">
   <div class="modal">
     <div class="modal-title">🖨️ 棚卸カウント用紙</div>
-    <p style="font-size:13px;color:#718096;margin-bottom:16px">印刷したい用紙を選んでください。</p>
-    <div class="print-options">
-      <div class="print-option" onclick="printSheet('OTC')">
-        <div class="print-option-icon">💊</div>
-        <div><div class="print-option-label">OTC 棚卸用紙</div><div class="print-option-sub" id="otcPrintCount"></div></div>
-      </div>
-    </div>
-    <p style="font-size:12px;font-weight:600;color:#4A5568;margin:14px 0 8px">消耗品（項目ごと）</p>
-    <div class="print-options" id="consPrintOptions"></div>
+    <p style="font-size:13px;color:#718096;margin-bottom:4px">印刷したい項目にチェックを入れて「選んだ項目を印刷」を押してください。</p>
+    <p style="font-size:12px;color:#A0AEC0;margin-bottom:6px">1項目ごとに用紙を分けて印刷します。</p>
+    <!-- 項目のチェック欄は showPrintModal() が登録データに合わせて作る -->
+    <div id="printUnitOptions"></div>
+    <button class="btn btn-primary" id="printSelectedBtn" onclick="printSelectedSheets()" style="width:100%;margin-top:14px" disabled>選んだ項目を印刷</button>
     <hr class="modal-divider">
     <div class="print-option" onclick="printAllSheets()" style="border-color:#4A7FC1;background:#F0F7FF">
       <div class="print-option-icon">🖨️</div>
@@ -564,7 +567,7 @@ td.name { font-weight:500;color:#2D3748;max-width:200px; }
     <div class="help-section">
       <div class="help-section-title">🖨️ 棚卸用紙の使い方</div>
       <div class="help-steps">
-        <div class="help-step"><div class="help-step-num">1</div><div class="help-step-text"><strong>「🖨️ 棚卸用紙」</strong> を押して印刷したい種類を選ぶ</div></div>
+        <div class="help-step"><div class="help-step-num">1</div><div class="help-step-text"><strong>「🖨️ 棚卸用紙」</strong> を押して、印刷したい項目に <strong>チェック</strong> を入れる（複数選べる）→「選んだ項目を印刷」</div></div>
         <div class="help-step"><div class="help-step-num">2</div><div class="help-step-text">商品名とカウント記入欄だけの用紙が印刷される</div></div>
         <div class="help-step"><div class="help-step-num">3</div><div class="help-step-text">印刷した紙に実際の数を <strong>手書きで記入</strong> して棚卸に使う</div></div>
         <div class="help-step"><div class="help-step-num">4</div><div class="help-step-text"><strong>「すべて一括印刷」</strong> を選ぶと OTC・消耗品すべてをまとめて1回で印刷できる</div></div>
@@ -644,7 +647,27 @@ var sortAsc = true;
 var currentTab = 'all';
 var currentSubtab = 'all';
 var selectedDeleteIds = {};
-var ITEM_CATS = ['瓶','調剤','袋','軟膏容器','分包','窓消','機械'];
+// 分類ごとの項目（プルダウン・絞り込み・印刷にこの順で表示される）
+var OTC_ITEM_CATS = ['従業員'];
+var ITEM_CATS = ['分包紙','薬袋','手帳/その他','軟膏容器','投薬瓶','インクカートリッジ','マルチリボン','その他'];
+// 旧項目名 → 新項目名。対応がはっきりしているものだけ、読み込み時に自動で置き換える。
+// （調剤・窓消・機械は置き換え先が決まらないので、そのまま残して一括変換で移してもらう）
+var LEGACY_ITEM_MAP = { '瓶':'投薬瓶', '袋':'薬袋', '分包':'分包紙' };
+function migrateItemName(name){
+  var v = String(name || '').trim();
+  return LEGACY_ITEM_MAP[v] || v;
+}
+// 分類に対応する項目一覧。定義済みの項目のあとに、登録データにだけある項目（旧項目など）を足す。
+// こうしておくと、旧項目の商品も絞り込み・印刷・一括変換の対象から漏れない。
+function getItemCats(category){
+  var base = category==='OTC' ? OTC_ITEM_CATS.slice() : category==='消耗品' ? ITEM_CATS.slice() : [];
+  items.forEach(function(i){
+    if(i.category===category && i.item && base.indexOf(i.item)===-1) base.push(i.item);
+  });
+  return base;
+}
+// onclick属性の中に文字列を安全に埋め込むための変換（' と \ を逃がしてから、HTML用にも変換する）
+function jsArg(s){ return esc("'"+String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'")+"'"); }
 
 function addWholesaler(w) {
   if(!w) return;
@@ -805,7 +828,7 @@ function normalizeItem(item) {
     sellPrice: item.sellPrice !== undefined ? item.sellPrice : '',
     employeePrice: item.employeePrice !== undefined ? item.employeePrice : '',
     category: item.category || '',
-    item: item.item || '',
+    item: migrateItemName(item.item),
     deliveries: deliveries
   };
 }
@@ -831,15 +854,30 @@ function switchTab(tab) {
   currentTab=tab; currentSubtab='all';
   selectedDeleteIds = {};
   document.querySelectorAll('.tab').forEach(function(t){ t.classList.toggle('active',t.dataset.tab===tab); });
-  document.getElementById('subtabs').style.display=(tab==='消耗品')?'flex':'none';
-  if(tab==='消耗品') document.querySelectorAll('.subtab').forEach(function(t){ t.classList.toggle('active',t.dataset.item==='all'); });
   renderTable();
 }
 function switchSubtab(item) {
   currentSubtab=item;
   selectedDeleteIds = {};
-  document.querySelectorAll('.subtab').forEach(function(t){ t.classList.toggle('active',t.dataset.item===item); });
   renderTable();
+}
+// 項目の絞り込みボタンを作る。「すべて」＋項目＋（該当があれば）「項目なし」。
+// currentSubtab は 'all'＝すべて、''＝項目なし、それ以外＝項目名。
+// 一括変換で項目が増減するので、表を描き直すたびに作り直す。
+function renderSubtabs() {
+  var box=document.getElementById('subtabs');
+  if(currentTab!=='OTC'&&currentTab!=='消耗品'){ box.style.display='none'; box.innerHTML=''; return; }
+  var cats=getItemCats(currentTab);
+  var inTab=items.filter(function(i){ return i.category===currentTab; });
+  var html='<button class="subtab'+(currentSubtab==='all'?' active':'')+'" data-item="all" onclick="switchSubtab(\'all\')">すべて</button>';
+  cats.forEach(function(cat){
+    html+='<button class="subtab'+(currentSubtab===cat?' active':'')+'" data-item="'+esc(cat)+'" onclick="switchSubtab('+jsArg(cat)+')">'+esc(cat)+'</button>';
+  });
+  if(inTab.some(function(i){ return !i.item; })){
+    html+='<button class="subtab'+(currentSubtab===''?' active':'')+'" data-item="" onclick="switchSubtab(\'\')">項目なし</button>';
+  }
+  box.innerHTML=html;
+  box.style.display='flex';
 }
 
 function sortBy(key) {
@@ -855,7 +893,7 @@ function getFiltered() {
   var q=document.getElementById('searchInput').value.trim().toLowerCase();
   return items.filter(function(item){
     if(currentTab!=='all'&&item.category!==currentTab) return false;
-    if(currentTab==='消耗品'&&currentSubtab!=='all'&&item.item!==currentSubtab) return false;
+    if(currentTab!=='all'&&currentSubtab!=='all'&&(item.item||'')!==currentSubtab) return false;
     if(q&&!(item.name||'').toLowerCase().includes(q)&&!(item.janCode||'').toLowerCase().includes(q)&&!(item.wholesaler||'').toLowerCase().includes(q)) return false;
     return true;
   });
@@ -897,8 +935,12 @@ function updateBulkDeleteUi(visibleItems){
   var selectedIds = getSelectedDeleteIds();
   var countEl = document.getElementById('bulkDeleteCount');
   var btn = document.getElementById('bulkDeleteBtn');
-  if(countEl) countEl.textContent = '削除選択：'+selectedIds.length+'件';
+  if(countEl) countEl.textContent = '選択：'+selectedIds.length+'件';
   if(btn) btn.disabled = selectedIds.length === 0;
+  // 一括変換ボタンは「商品を選んでいる」かつ「分類を選んでいる」ときだけ押せる
+  var changeBtn = document.getElementById('bulkChangeBtn');
+  var bulkCat = document.getElementById('bulkCategory');
+  if(changeBtn) changeBtn.disabled = selectedIds.length === 0 || !bulkCat || !bulkCat.value;
 
   var allBox = document.getElementById('deleteSelectAll');
   if(!allBox) return;
@@ -926,6 +968,7 @@ function toggleAllVisibleDeleteSelection(input){
 
 function renderTable() {
   updateStats();
+  renderSubtabs();
   var filtered=getSorted(getFiltered());
   var titles={all:'商品一覧',OTC:'OTC 商品','消耗品':'消耗品'};
   document.getElementById('tableTitle').textContent=titles[currentTab]||'商品一覧';
@@ -1001,6 +1044,7 @@ function openProductModal(id) {
     document.getElementById('p_sellPrice').value=item.sellPrice!==''&&item.sellPrice!==null&&item.sellPrice!==undefined?item.sellPrice:'';
     document.getElementById('p_employeePrice').value=item.employeePrice!==''&&item.employeePrice!==null&&item.employeePrice!==undefined?item.employeePrice:'';
     document.getElementById('p_category').value=item.category||'';
+    togglePItemField();  // 分類に合った項目の選択肢を先に並べてから値を入れる
     document.getElementById('p_item').value=item.item||'';
     var ld=getLatest(item);
     if(ld){
@@ -1017,11 +1061,23 @@ function openProductModal(id) {
   document.getElementById('productModal').classList.add('open');
 }
 function closeProductModal(){ document.getElementById('productModal').classList.remove('open'); }
+// 項目のプルダウンに、指定した分類の項目を並べる（選択中の値はできるだけ残す）
+function fillItemSelect(selectEl, category, emptyLabel){
+  var current=selectEl.value;
+  var cats=getItemCats(category);
+  selectEl.innerHTML='<option value="">'+esc(emptyLabel)+'</option>'+cats.map(function(c){
+    return '<option value="'+esc(c)+'">'+esc(c)+'</option>';
+  }).join('');
+  selectEl.value=cats.indexOf(current)!==-1?current:'';
+}
 function togglePItemField(){
   var cat=document.getElementById('p_category').value;
   var g=document.getElementById('pItemFieldGroup');
-  if(cat==='OTC'){ g.style.opacity='.4'; g.style.pointerEvents='none'; document.getElementById('p_item').value=''; }
-  else { g.style.opacity='1'; g.style.pointerEvents=''; }
+  var sel=document.getElementById('p_item');
+  // 分類が未選択のときは項目を選べないようにする
+  if(!cat){ g.style.opacity='.4'; g.style.pointerEvents='none'; sel.innerHTML='<option value="">先に分類を選択</option>'; return; }
+  g.style.opacity='1'; g.style.pointerEvents='';
+  fillItemSelect(sel, cat, cat==='OTC' ? 'なし' : '選択してください');
 }
 function saveProduct(){
   var name=document.getElementById('p_name').value.trim();
@@ -1048,7 +1104,7 @@ function saveProduct(){
       items[idx].sellPrice=sp!==''?Number(sp):'';
       items[idx].employeePrice=ep!==''?Number(ep):'';
       items[idx].category=cat;
-      items[idx].item=cat==='消耗品'?document.getElementById('p_item').value:'';
+      items[idx].item=document.getElementById('p_item').value;
       if(d||exp||q!==''||c!==''||cEx!==''){
         if(!items[idx].deliveries) items[idx].deliveries=[];
         var latest=getLatest(items[idx]);
@@ -1068,7 +1124,7 @@ function saveProduct(){
   } else {
     var deliveries=[];
     if(d||exp||q!==''||c!==''||cEx!==''){ deliveries.push({id:genId(),date:d||'',expirationDate:exp||'',qty:q!==''?Number(q):'',cost:c!==''?Number(c):'',costExTax:cEx!==''?Number(cEx):'',taxRate:cRate!==''?Number(cRate):''}); }
-    items.push({id:genId(),name:name,janCode:janCode,wholesaler:ws,sellPrice:sp!==''?Number(sp):'',employeePrice:ep!==''?Number(ep):'',category:cat,item:cat==='消耗品'?document.getElementById('p_item').value:'',deliveries:deliveries});
+    items.push({id:genId(),name:name,janCode:janCode,wholesaler:ws,sellPrice:sp!==''?Number(sp):'',employeePrice:ep!==''?Number(ep):'',category:cat,item:document.getElementById('p_item').value,deliveries:deliveries});
     saveToLocalStorage(); showToast('✅ 商品を追加しました');
   }
   closeProductModal();
@@ -1202,7 +1258,56 @@ function askDeleteSelectedProducts(){
   document.getElementById('confirmBtn').onclick=function(){ if(confirmCallback) confirmCallback(); };
   document.getElementById('confirmModal').classList.add('open');
 }
-function closeConfirm(){ document.getElementById('confirmModal').classList.remove('open'); }
+function closeConfirm(){
+  document.getElementById('confirmModal').classList.remove('open');
+  // 一括変換で青ボタンに変えた場合も、次の削除確認では元の赤い「削除する」に戻す
+  var btn=document.getElementById('confirmBtn');
+  btn.className='btn btn-danger'; btn.textContent='削除する';
+}
+
+/* -------- 分類・項目の一括変換 -------- */
+// 分類を選んだら、その分類の項目をプルダウンに並べる
+function onBulkCategoryChange(){
+  var cat=document.getElementById('bulkCategory').value;
+  var sel=document.getElementById('bulkItem');
+  if(!cat){ sel.innerHTML='<option value="">項目</option>'; sel.disabled=true; }
+  else { sel.disabled=false; fillItemSelect(sel, cat, cat==='OTC' ? '項目なし' : '項目を選択'); }
+  updateBulkDeleteUi();
+}
+function askChangeSelectedCategory(){
+  var selectedIds = getSelectedDeleteIds();
+  var cat = document.getElementById('bulkCategory').value;
+  var it = document.getElementById('bulkItem').value;
+  if(selectedIds.length===0){ showToast('変更する商品にチェックを入れてください','error'); return; }
+  if(!cat){ showToast('変更後の分類を選択してください','error'); return; }
+  // 消耗品は項目ごとに棚卸用紙を分けるので、項目なしにはしない
+  if(cat==='消耗品' && !it){ showToast('消耗品の項目を選択してください','error'); return; }
+  var targetLabel = cat+(it ? '／'+it : '（項目なし）');
+  var selectedNames = items.filter(function(item){ return selectedDeleteIds[item.id]; }).slice(0,5).map(function(item){ return '・'+item.name; }).join('\n');
+  var more = selectedIds.length>5 ? '\nほか '+(selectedIds.length-5)+'件' : '';
+  confirmCallback=function(){
+    var targetMap = {};
+    selectedIds.forEach(function(id){ targetMap[id]=true; });
+    // 分類と項目だけを書き換える（価格・入荷履歴などはそのまま残る）
+    items.forEach(function(item){
+      if(!targetMap[item.id]) return;
+      item.category = cat;
+      item.item = it;
+    });
+    selectedDeleteIds = {};
+    closeConfirm();
+    renderTable();
+    saveToLocalStorage();
+    showToast('✅ '+selectedIds.length+'件を「'+targetLabel+'」に変更しました');
+  };
+  document.getElementById('confirmIcon').textContent='🔁';
+  document.getElementById('confirmTitle').textContent='分類・項目を変更しますか？';
+  document.getElementById('confirmMsg').textContent=selectedIds.length+'件の商品を「'+targetLabel+'」に変更します。価格や入荷履歴はそのまま残ります。\n\n'+selectedNames+more;
+  var btn=document.getElementById('confirmBtn');
+  btn.className='btn btn-primary'; btn.textContent='変更する';
+  btn.onclick=function(){ if(confirmCallback) confirmCallback(); };
+  document.getElementById('confirmModal').classList.add('open');
+}
 
 function closeModalOnBg(e){ if(e.target===e.currentTarget) e.currentTarget.classList.remove('open'); }
 function openHelp(){ document.getElementById('helpModal').classList.add('open'); }
@@ -1335,7 +1440,7 @@ function handleExcelImport(e){
         var ep=(row['従業員価格（円）']!==''&&row['従業員価格（円）']!==null&&row['従業員価格（円）']!==undefined)?Number(row['従業員価格（円）']):(row['従業員価格']!==''&&row['従業員価格']!==null&&row['従業員価格']!==undefined?Number(row['従業員価格']):'');
         var deliveries=[]; if(dateStr||expirationStr||qty!==''||cost!==''||costExTax!=='') deliveries.push({id:genId(),date:dateStr,expirationDate:expirationStr,qty:qty,cost:cost,costExTax:costExTax,taxRate:taxRate});
         var ws=String(row['仕入れ先']||row['卸']||'').trim();
-        items.push({id:genId(),name:name,janCode:janCode,wholesaler:ws,sellPrice:sp,employeePrice:ep,category:String(row['分類']||'').trim(),item:String(row['項目']||'').trim(),deliveries:deliveries});
+        items.push({id:genId(),name:name,janCode:janCode,wholesaler:ws,sellPrice:sp,employeePrice:ep,category:String(row['分類']||'').trim(),item:migrateItemName(row['項目']),deliveries:deliveries});
         if(ws) addWholesaler(ws);
         count++;
       });
@@ -1345,23 +1450,64 @@ function handleExcelImport(e){
   reader.readAsArrayBuffer(file); e.target.value='';
 }
 
+// 棚卸用紙の印刷単位（分類＋項目）の一覧を作る。
+// item が null のときは「その分類すべて」、'' のときは「項目なし」の商品を表す。
+function getPrintUnits(){
+  var units=[];
+  ['OTC','消耗品'].forEach(function(cat){
+    var inCat=items.filter(function(i){ return i.category===cat; });
+    if(cat==='OTC') units.push({category:cat,item:null,count:inCat.length});
+    getItemCats(cat).forEach(function(it){
+      units.push({category:cat,item:it,count:inCat.filter(function(i){ return i.item===it; }).length});
+    });
+    var noItem=inCat.filter(function(i){ return !i.item; }).length;
+    // OTCは通常項目なしなので、従業員以外だけを印刷したいとき用に「項目なし」も出す
+    if(noItem>0) units.push({category:cat,item:'',count:noItem});
+  });
+  return units;
+}
+function printUnitLabel(u){
+  if(u.item===null) return u.category+'（すべて）';
+  return u.category+' — '+(u.item ? u.item : '項目なし');
+}
 function showPrintModal(){
-  var otcCnt=items.filter(function(i){ return i.category==='OTC'; }).length;
-  document.getElementById('otcPrintCount').textContent=otcCnt+'件';
-  var opts=document.getElementById('consPrintOptions');
-  opts.innerHTML=ITEM_CATS.map(function(cat){
-    var cnt=items.filter(function(i){ return i.category==='消耗品'&&i.item===cat; }).length;
-    return '<div class="print-option" onclick="printSheet(\'消耗品\',\''+cat+'\')"><div class="print-option-icon">'+itemEmoji(cat)+'</div><div><div class="print-option-label">消耗品 — '+cat+'</div><div class="print-option-sub">'+cnt+'件</div></div></div>';
-  }).join('');
+  var units=getPrintUnits();
+  var html='';
+  ['OTC','消耗品'].forEach(function(cat){
+    html+='<div class="print-group-title">'+(cat==='OTC'?'💊 OTC':'🧴 消耗品（項目ごと）')+'</div><div class="print-options">';
+    units.forEach(function(u, idx){
+      if(u.category!==cat) return;
+      var disabled=u.count===0;
+      html+='<label class="print-option print-unit'+(disabled?' disabled':'')+'">'
+        +'<input type="checkbox" class="print-unit-check" data-index="'+idx+'"'+(disabled?' disabled':'')+' onchange="onPrintUnitToggle(this)">'
+        +'<div class="print-option-icon">'+(u.item===null?'💊':itemEmoji(u.item))+'</div>'
+        +'<div><div class="print-option-label">'+esc(printUnitLabel(u))+'</div><div class="print-option-sub">'+u.count+'件</div></div>'
+        +'</label>';
+    });
+    html+='</div>';
+  });
+  document.getElementById('printUnitOptions').innerHTML=html;
+  updatePrintSelectedBtn();
   document.getElementById('printModal').classList.add('open');
 }
+function onPrintUnitToggle(input){
+  input.closest('.print-unit').classList.toggle('checked', input.checked);
+  updatePrintSelectedBtn();
+}
+function updatePrintSelectedBtn(){
+  var n=document.querySelectorAll('.print-unit-check:checked').length;
+  var btn=document.getElementById('printSelectedBtn');
+  btn.disabled=n===0;
+  btn.textContent=n===0 ? '選んだ項目を印刷' : '選んだ'+n+'項目を印刷';
+}
 function closePrintModal(){ document.getElementById('printModal').classList.remove('open'); }
-function itemEmoji(item){ return {瓶:'🍶',調剤:'⚗️',袋:'🛍️',軟膏容器:'🧴',分包:'📦',窓消:'🪟',機械:'⚙️'}[item]||'📋'; }
+function itemEmoji(item){ return {従業員:'🧑‍⚕️',分包紙:'📦',薬袋:'🛍️','手帳/その他':'📒',軟膏容器:'🧴',投薬瓶:'🍶',インクカートリッジ:'🖋️',マルチリボン:'🎀',その他:'📋'}[item]||'📋'; }
 
+// 棚卸用紙1枚ぶんのHTML。itemFilter が null/undefined ならその分類すべて、'' なら項目なしの商品。
 function buildSheetHtml(category,itemFilter,now){
-  var data,title;
-  if(category==='OTC'){ data=items.filter(function(i){ return i.category==='OTC'; }); title='OTC　棚卸'; }
-  else { data=items.filter(function(i){ return i.category==='消耗品'&&i.item===itemFilter; }); title='消耗品（'+itemFilter+'）　棚卸'; }
+  var all=itemFilter===null||itemFilter===undefined;
+  var data=items.filter(function(i){ return i.category===category && (all || (i.item||'')===itemFilter); });
+  var title=all ? category+'　棚卸' : category+'（'+(itemFilter ? itemFilter : '項目なし')+'）　棚卸';
   data=data.slice().sort(function(a,b){ return (a.name||'').localeCompare(b.name||'','ja'); });
   // 棚卸用紙は現場で手書きしやすいように、商品名とカウント欄だけを出す。
   // システム在庫・原価・合計金額は印刷しないため、既存在庫の数値を見ながら数える運用にならない。
@@ -1370,26 +1516,34 @@ function buildSheetHtml(category,itemFilter,now){
   }).join('');
   return '<div class="print-sheet"><div class="print-header-area"><div class="print-title">棚卸カウント用紙</div><div class="print-meta"><span>実施日：____年____月____日</span><span>担当者：________________</span></div><div class="print-subtitle">対象：'+esc(title)+'　総数：'+data.length+'件</div></div><table class="print-table"><thead><tr><th>商品名</th><th style="width:120px;text-align:center">カウント数</th></tr></thead><tbody>'+(rows||'<tr><td colspan="2" style="text-align:center;padding:20px;color:#999">該当商品がありません</td></tr>')+'</tbody></table><div class="print-footer"><span>印刷日：'+now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日</span></div></div>';
 }
-function printSheet(category,itemFilter){
+// 用紙のHTMLをまとめて印刷する
+function printSheetsHtml(sheets){
   closePrintModal();
-  var now=new Date();
-  document.getElementById('printArea').innerHTML=buildSheetHtml(category,itemFilter,now);
-  document.getElementById('printArea').style.display='block';
-  window.print();
-  document.getElementById('printArea').style.display='none';
-}
-function printAllSheets(){
-  closePrintModal();
-  var now=new Date();
-  var sheets=[buildSheetHtml('OTC','',now)];
-  ITEM_CATS.forEach(function(cat){
-    var cnt=items.filter(function(i){ return i.category==='消耗品'&&i.item===cat; }).length;
-    if(cnt>0) sheets.push(buildSheetHtml('消耗品',cat,now));
-  });
   document.getElementById('printArea').innerHTML=sheets.join('');
   document.getElementById('printArea').style.display='block';
   window.print();
   document.getElementById('printArea').style.display='none';
+}
+// チェックした項目だけを、画面の並び順どおりに印刷する
+function printSelectedSheets(){
+  var units=getPrintUnits();
+  var now=new Date();
+  var sheets=[];
+  document.querySelectorAll('.print-unit-check:checked').forEach(function(input){
+    var u=units[Number(input.dataset.index)];
+    if(u) sheets.push(buildSheetHtml(u.category,u.item,now));
+  });
+  if(sheets.length===0){ showToast('印刷する項目にチェックを入れてください','error'); return; }
+  printSheetsHtml(sheets);
+}
+// すべて一括：OTCすべて＋消耗品の項目ごと（商品がある項目だけ）
+function printAllSheets(){
+  var now=new Date();
+  var sheets=[buildSheetHtml('OTC',null,now)];
+  getPrintUnits().forEach(function(u){
+    if(u.category==='消耗品' && u.count>0) sheets.push(buildSheetHtml('消耗品',u.item,now));
+  });
+  printSheetsHtml(sheets);
 }
 
 /* -------- 棚卸入力モード -------- */
@@ -1413,9 +1567,9 @@ function closeTanakatsu() {
 
 function renderTanakatsuTabs() {
   var html = '<button class="tana-tab '+(tanakatsuCategory==='OTC'?'active':'')+'" onclick="switchTanakatsuTab(\'OTC\',\'\')">💊 OTC</button>';
-  ITEM_CATS.forEach(function(cat) {
+  getItemCats('消耗品').forEach(function(cat) {
     var active = tanakatsuCategory==='消耗品' && tanakatsuItem===cat;
-    html += '<button class="tana-tab '+(active?'active':'')+'" onclick="switchTanakatsuTab(\'消耗品\',\''+cat+'\')">'+itemEmoji(cat)+' '+cat+'</button>';
+    html += '<button class="tana-tab '+(active?'active':'')+'" onclick="switchTanakatsuTab(\'消耗品\','+jsArg(cat)+')">'+itemEmoji(cat)+' '+esc(cat)+'</button>';
   });
   document.getElementById('tanakatsuTabs').innerHTML = html;
 }
