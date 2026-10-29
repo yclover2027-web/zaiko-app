@@ -153,6 +153,7 @@ td.name { font-weight:500;color:#2D3748;max-width:200px; }
 .new-delivery-form { background:#F0FAF5;border:1.5px dashed #6FCF97;border-radius:12px;padding:16px; }
 .new-delivery-title { font-size:13px;font-weight:700;color:#059669;margin-bottom:12px;display:flex;align-items:center;gap:6px; }
 
+#confirmModal { z-index:260; }
 #confirmModal .modal { max-width:380px;text-align:center;padding:32px 28px; }
 .confirm-icon { font-size:44px;margin-bottom:12px; }
 .confirm-title { font-size:16px;font-weight:700;margin-bottom:8px; }
@@ -610,6 +611,7 @@ td.name { font-weight:500;color:#2D3748;max-width:200px; }
         <div class="help-step"><div class="help-step-num">2</div><div class="help-step-text">実際に棚の商品を数えて <strong>カウント欄に数字</strong> を入力する</div></div>
         <div class="help-step"><div class="help-step-num">3</div><div class="help-step-text">合計金額とTOTALが <strong>自動で計算</strong> される</div></div>
         <div class="help-step"><div class="help-step-num">4</div><div class="help-step-text">「🖨️ 結果を印刷」で、カウントが1以上の商品だけを記録として印刷できる</div></div>
+        <div class="help-step"><div class="help-step-num">5</div><div class="help-step-text">入力したカウントは <strong>自動で保存</strong> され、アプリを閉じても残る。棚卸が終わったら <strong>「🗑️ 入力を全削除」</strong> で消す</div></div>
       </div>
     </div>
 
@@ -626,11 +628,12 @@ td.name { font-weight:500;color:#2D3748;max-width:200px; }
       <div class="tana-header-icon">📊</div>
       <div>
         <div style="color:#fff;font-size:20px;font-weight:700">棚卸入力</div>
-        <div style="color:rgba(255,255,255,.7);font-size:11px">カウントを入力してください</div>
+        <div style="color:rgba(255,255,255,.7);font-size:11px">カウントを入力してください（入力は自動保存され、閉じても残ります）</div>
       </div>
     </div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-white btn-sm" onclick="printTanakatsu()">🖨️ 結果を印刷</button>
+      <button class="btn btn-danger btn-sm" onclick="askClearTanakatsuCounts()">🗑️ 入力を全削除</button>
       <button class="btn btn-white btn-sm" onclick="closeTanakatsu()">✕ 閉じる</button>
     </div>
   </div>
@@ -1664,9 +1667,42 @@ var tanakatsuCounts = {};   // { itemId: count }
 var tanakatsuCategory = 'OTC';
 var tanakatsuItem = null;   // null = その分類すべて、'' = 項目なし、それ以外 = 項目名
 var tanakatsuUnits = [];    // タブの一覧（getPrintUnits の結果）
+// 棚卸のカウントは在庫データとは別の場所に保存する。
+// アプリを閉じても残し、棚卸が終わったら「入力を全削除」で消す運用。
+var TANAKATSU_STORAGE_KEY = 'zaiko_tanakatsu_counts';
+
+function saveTanakatsuCounts() {
+  try { localStorage.setItem(TANAKATSU_STORAGE_KEY, JSON.stringify(tanakatsuCounts)); }
+  catch(e){ showToast('棚卸入力の保存に失敗しました','error'); }
+}
+function loadTanakatsuCounts() {
+  try {
+    var raw = localStorage.getItem(TANAKATSU_STORAGE_KEY);
+    var data = raw ? JSON.parse(raw) : {};
+    tanakatsuCounts = (data && typeof data === 'object') ? data : {};
+  } catch(e){ tanakatsuCounts = {}; }
+}
+
+function askClearTanakatsuCounts() {
+  var n = Object.keys(tanakatsuCounts).length;
+  if(n === 0){ showToast('削除する棚卸入力がありません','info'); return; }
+  confirmCallback = function(){
+    tanakatsuCounts = {};
+    try { localStorage.removeItem(TANAKATSU_STORAGE_KEY); } catch(e){}
+    closeConfirm();
+    renderTanakatsuTable();
+    showToast('🗑️ 棚卸入力をすべて削除しました','info');
+  };
+  document.getElementById('confirmIcon').textContent='🗑️';
+  document.getElementById('confirmTitle').textContent='棚卸入力をすべて削除しますか？';
+  document.getElementById('confirmMsg').textContent='すべてのタブのカウント（'+n+'件）を削除します。商品データは消えません。この操作は取り消せません。';
+  document.getElementById('confirmBtn').onclick=function(){ if(confirmCallback) confirmCallback(); };
+  document.getElementById('confirmModal').classList.add('open');
+}
 
 function openTanakatsu() {
-  tanakatsuCounts = {};
+  // 前回までの入力を読み込む（開くたびに空にしない）
+  loadTanakatsuCounts();
   tanakatsuCategory = 'OTC';
   tanakatsuItem = null;
   var el = document.getElementById('tanakatsuOverlay');
@@ -1752,6 +1788,7 @@ function onTanaCountInput(input) {
 
   if(count !== '') tanakatsuCounts[id] = count;
   else delete tanakatsuCounts[id];
+  saveTanakatsuCounts();
 
   var cell = document.getElementById('tana-sub-'+id);
   if(cell) {
