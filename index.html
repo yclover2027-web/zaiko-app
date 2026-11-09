@@ -429,6 +429,12 @@ td.name { font-weight:500;color:#2D3748;max-width:200px; }
         </div>
       </div>
     </div>
+    <!-- 備考欄：商品ごとの自由メモ（3〜4行ほど入力できる大きさ） -->
+    <hr class="modal-divider">
+    <div class="form-group full">
+      <label class="form-label">備考 <span class="opt">任意</span></label>
+      <textarea class="form-input" id="p_note" rows="4" placeholder="例：取り寄せ品・発注時の注意など" style="resize:vertical;min-height:96px;line-height:1.5;"></textarea>
+    </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeProductModal()">キャンセル</button>
       <button class="btn btn-primary" onclick="saveProduct()">💾 保存</button>
@@ -860,6 +866,7 @@ function normalizeItem(item) {
     employeePrice: item.employeePrice !== undefined ? item.employeePrice : '',
     category: item.category || '',
     item: migrateItemName(item.item),
+    note: item.note || '',  // 備考（古いデータには無いので空欄で補う）
     deliveries: deliveries
   };
 }
@@ -1061,7 +1068,7 @@ function openProductModal(id) {
   document.getElementById('pPriceSectionTitle').innerHTML=isNew
     ? '💰 原価・提案売価 <span style="font-weight:400;color:#A0AEC0">（任意）</span>'
     : '💰 価格・最新入荷情報 <span style="font-weight:400;color:#A0AEC0">（任意）</span>';
-  ['p_name','p_janCode','p_wholesaler','p_sellPrice','p_employeePrice','p_date','p_expirationDate','p_qty','p_costExTax','p_taxRate','p_cost'].forEach(function(i){ document.getElementById(i).value=''; });
+  ['p_name','p_janCode','p_note','p_wholesaler','p_sellPrice','p_employeePrice','p_date','p_expirationDate','p_qty','p_costExTax','p_taxRate','p_cost'].forEach(function(i){ document.getElementById(i).value=''; });
   updatePriceCalculation('p');
   document.getElementById('p_category').value='';
   document.getElementById('p_item').value='';
@@ -1071,6 +1078,7 @@ function openProductModal(id) {
     if(!item) return;
     document.getElementById('p_name').value=item.name||'';
     document.getElementById('p_janCode').value=item.janCode||'';
+    document.getElementById('p_note').value=item.note||'';  // 保存済みの備考を表示
     document.getElementById('p_wholesaler').value=item.wholesaler||'';
     document.getElementById('p_sellPrice').value=item.sellPrice!==''&&item.sellPrice!==null&&item.sellPrice!==undefined?item.sellPrice:'';
     document.getElementById('p_employeePrice').value=item.employeePrice!==''&&item.employeePrice!==null&&item.employeePrice!==undefined?item.employeePrice:'';
@@ -1116,6 +1124,8 @@ function saveProduct(){
   var janCode=document.getElementById('p_janCode').value.trim();
   var cat=document.getElementById('p_category').value;
   if(!cat){ showToast('分類を選択してください','error'); return; }
+  // 備考は前後の空白だけ取り除く（途中の改行はそのまま残す）
+  var note=document.getElementById('p_note').value.trim();
   var sp=document.getElementById('p_sellPrice').value;
   var ep=document.getElementById('p_employeePrice').value;
   var ws=document.getElementById('p_wholesaler').value.trim();
@@ -1131,6 +1141,7 @@ function saveProduct(){
     if(idx!==-1){
       items[idx].name=name;
       items[idx].janCode=janCode;
+      items[idx].note=note;
       items[idx].wholesaler=ws;
       items[idx].sellPrice=sp!==''?Number(sp):'';
       items[idx].employeePrice=ep!==''?Number(ep):'';
@@ -1155,7 +1166,7 @@ function saveProduct(){
   } else {
     var deliveries=[];
     if(d||exp||q!==''||c!==''||cEx!==''){ deliveries.push({id:genId(),date:d||'',expirationDate:exp||'',qty:q!==''?Number(q):'',cost:c!==''?Number(c):'',costExTax:cEx!==''?Number(cEx):'',taxRate:cRate!==''?Number(cRate):''}); }
-    items.push({id:genId(),name:name,janCode:janCode,wholesaler:ws,sellPrice:sp!==''?Number(sp):'',employeePrice:ep!==''?Number(ep):'',category:cat,item:document.getElementById('p_item').value,deliveries:deliveries});
+    items.push({id:genId(),name:name,janCode:janCode,note:note,wholesaler:ws,sellPrice:sp!==''?Number(sp):'',employeePrice:ep!==''?Number(ep):'',category:cat,item:document.getElementById('p_item').value,deliveries:deliveries});
     saveToLocalStorage(); showToast('✅ 商品を追加しました');
   }
   closeProductModal();
